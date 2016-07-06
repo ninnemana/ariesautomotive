@@ -11,8 +11,6 @@ class App extends Component {
 	static propTypes = {
 		context: PropTypes.shape({
 			insertCss: PropTypes.func,
-			onSetTitle: PropTypes.func,
-			onSetMeta: PropTypes.func,
 			onPageNotFound: PropTypes.func,
 			years: PropTypes.array,
 			categories: PropTypes.array,
@@ -25,20 +23,14 @@ class App extends Component {
 
 	static childContextTypes = {
 		insertCss: PropTypes.func.isRequired,
-		onSetTitle: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	getChildContext() {
 		const context = this.props.context;
 		return {
 			insertCss: context.insertCss || emptyFunction,
-			onSetTitle: context.onSetTitle || emptyFunction,
-			onSetMeta: context.onSetMeta || emptyFunction,
 			onPageNotFound: context.onPageNotFound || emptyFunction,
-			seo: context.seo || emptyFunction,
 		};
 	}
 

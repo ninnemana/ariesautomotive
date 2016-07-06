@@ -2,21 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import s from './Terms.scss';
 import withStyles from '../../decorators/withStyles';
 
-const title = 'Terms and Conditions';
-
 @withStyles(s)
 class Terms extends Component {
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
-
-	componentWillMount() {
-		this.context.onSetTitle(title);
-	}
 
 	render() {
 		return (

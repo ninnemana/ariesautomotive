@@ -32,7 +32,6 @@ class Footer extends Component {
 				<li><a href="/buy" title="Where To Buy">WHERE TO BUY</a></li>
 				<li><a href="http://orders.ariesautomotive.com/" title="COMNET">COMNET</a></li>
 				<li><a href="/news" title="Latest News">LATEST NEWS</a></li>
-				<li><a href="/techsupport" title="Technical Support">TECH SUPPORT</a></li>
 				<li><a href="/warranties" title="Online Warranties">ONLINE WARRANTIES</a></li>
 				<li><a href="/contact" title="Contact Us">CONTACT</a></li>
 				{customContent}

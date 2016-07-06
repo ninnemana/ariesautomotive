@@ -3,8 +3,6 @@ import cx from 'classnames';
 import s from './Envision.scss';
 import withStyles from '../../decorators/withStyles';
 
-const title = 'Envision';
-
 @withStyles(s)
 class Envision extends Component {
 
@@ -13,20 +11,8 @@ class Envision extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
-
-	componentWillMount() {
-		this.context.onSetTitle(title);
-		this.context.onSetMeta(title);
-		const seo = {
-			title,
-		};
-		this.context.seo(seo);
-	}
 
 	render() {
 		return (

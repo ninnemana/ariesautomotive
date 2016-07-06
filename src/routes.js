@@ -30,6 +30,20 @@ const KEY = apiKey;
 const gaOptions = { debug: true };
 const MyWindowDependentLibrary = isBrowser ? ga.initialize('UA-61502306-1', gaOptions) : undefined;
 
+const extendContext = (context, title, description, image) => {
+	const sImage = (!image || image === '') ? 'https://storage.googleapis.com/aries-logo/ARIES%20Logo%20(1c_red%20on%20transparent_small).png' : image;
+	const sTitle = (!title || title === '') ? 'ARIES Automotive' : title;
+	const sDesc = (!description || description === '') ? 'ARIES Automotive - Whatever terrain you choose to conquer, do it with style and do it with ARIES.' : description;
+	context.title = (!title || title === '') ? 'ARIES Automotive' : title;
+	context.description = (!description || description === '') ? 'ARIES Automotive' : description;
+	context.seo = {
+		title: sTitle,
+		description: sDesc,
+		image: sImage,
+	};
+	return context;
+};
+
 const router = new Router(on => {
 	on('*', async (state, next) => {
 		if (!state.context) {
@@ -105,6 +119,28 @@ const router = new Router(on => {
 			]);
 			state.part = await partResp.json();
 			state.featured = await featuredResp.json();
+
+			// title
+			const title = state.part.short_description ? state.part.short_description : 'Part Details';
+			// desc
+			let description = 'Part';
+			if (state.part.content) {
+				state.part.content.map((con) => {
+					if (con.contentType && con.contentType.type && con.contentType.type.toLowerCase() === 'marketingdescription') {
+						description = con.text;
+					}
+				});
+			}
+			// image
+			let image = '';
+			if (state.part.images) {
+				state.part.images.map((i) => {
+					if ((i.height < image.height || !image.height) && i.sort === 'a') {
+						image = `${i.path.Scheme}://${i.path.Host}${i.path.Path}`;
+					}
+				});
+			}
+			state.context = extendContext(state.context, title, description, image);
 		} catch (e) {
 			state.context.error = e;
 		}
@@ -119,6 +155,8 @@ const router = new Router(on => {
 			});
 
 			state.context.category = await catResponse.json();
+			const image = `${state.context.category.image.Scheme}://${state.context.category.image.Host}${state.context.category.image.Path}`;
+			state.context = extendContext(state.context, state.context.category.meta_description, state.context.category.long_description, image);
 		} catch (e) {
 			state.context.error = e;
 		}
@@ -134,6 +172,8 @@ const router = new Router(on => {
 			});
 
 			state.context.category = await catResponse.json();
+			const image = `${state.context.category.image.Scheme}://${state.context.category.image.Host}${state.context.category.image.Path}`;
+			state.context = extendContext(state.context, state.context.category.meta_description, state.context.category.long_description, image);
 		} catch (e) {
 			state.context.error = e;
 		}
@@ -155,6 +195,9 @@ const router = new Router(on => {
 
 			state.context.category = await catResponse.json();
 			state.context.category.parts = await partResponse.json();
+
+			const image = `${state.context.category.image.Scheme}://${state.context.category.image.Host}${state.context.category.image.Path}`;
+			state.context = extendContext(state.context, state.context.category.meta_description, state.context.category.long_description, image);
 		} catch (e) {
 			state.context.error = e;
 		}
@@ -170,10 +213,12 @@ const router = new Router(on => {
 
 			searchResult = await searchResponse.json();
 			term = state.params.term;
+
+			const title = term ? `Search: ${term}` : 'Search ARIES';
+			state.context = extendContext(state.context, title, title);
 		} catch (e) {
 			state.context.error = e;
 		}
-
 		return <SearchResults context={state.context} searchResult={searchResult} term={term} />;
 	});
 
@@ -221,34 +266,44 @@ const router = new Router(on => {
 			make: state.params.make,
 			model: state.params.model,
 		});
+		const title = state.params.year && state.params.make && state.params.model ? `${state.params.year} ${state.params.make} ${state.params.model}` : 'Vehicle Results';
+		const description = 'ARIES Automotive parts for ' + title;
+		state.context = extendContext(state.context, title, description);
 		return <VehicleResults context={state.context} />;
 	});
 
 	on('/about', async (state) => {
+		state.context = extendContext(state.context, 'About Us');
 		return <About context={state.context} />;
 	});
 
 	on('/appguides', async (state) => {
+		state.context = extendContext(state.context, 'Application Guides');
 		return <AppGuides context={state.context} />;
 	});
 
 	on('/becomedealer', async (state) => {
+		state.context = extendContext(state.context, 'Become an Aries Dealer');
 		return <BecomeDealer context={state.context} />;
 	});
 
 	on('/contact', async (state) => {
+		state.context = extendContext(state.context, 'Contact Aries');
 		return <Contact context={state.context} />;
 	});
 
 	on('/terms', async (state) => {
+		state.context = extendContext(state.context, 'Terms and Conditions');
 		return <Terms context={state.context} />;
 	});
 
 	on('/news', async (state) => {
+		state.context = extendContext(state.context, 'News');
 		return <LatestNews context={state.context} />;
 	});
 
 	on('/envision', async (state) => {
+		state.context = extendContext(state.context, 'Envision', 'Envision ARIES');
 		const loc = typeof window !== 'undefined' ? window.location : '';
 		return <Envision context={state.context} protocol={loc.protocol}/>;
 	});
@@ -263,16 +318,21 @@ const router = new Router(on => {
 		} catch (e) {
 			state.context.error = e;
 		}
+		const title = state.item && state.item.title ? state.item.title : 'Lastest News';
+		const description = state.item.content ? state.item.content : 'News';
+		state.context = extendContext(state.context, title, description);
 		return <LatestNewsItem context={state.context} item={state.item} />;
 	});
 
 	on('/buy', async (state) => {
 		state.context.id = state.params.id;
+		state.context = extendContext(state.context, 'Where To Buy');
 		return <WhereToBuy context={state.context} google={state.google} navigator={state.navigator} />;
 	});
 
 	on('/warranties', async (state) => {
 		state.context.id = state.params.id;
+		state.context = extendContext(state.context, 'Warranties');
 		return <Warranties context={state.context} />;
 	});
 
@@ -288,6 +348,9 @@ const router = new Router(on => {
 				state.context.customContent = state.context.siteContents[i];
 			}
 		}
+		const title = (state.context.customContent && state.context.customContent.title) ? state.context.customContent.title : 'ARIES';
+		const description = state.context.customContent.metaTitle ? state.context.customContent.metaTitle : 'ARIES';
+		state.context = extendContext(state.context, title, description);
 		return <CustomContent context={state.context} />;
 	});
 
@@ -300,6 +363,10 @@ const router = new Router(on => {
 		} catch (e) {
 			state.context.error = e;
 		}
+		const title = (state.page && state.page.Name) ? state.page.Name : 'ARIES';
+		const description = state.page && state.page.Name ? state.page.Name : 'Aries Automotive';
+		state.context = extendContext(state.context, title, description);
+
 		return <LandingPage context={state.context} page={state.page} />;
 	});
 
@@ -363,7 +430,7 @@ const router = new Router(on => {
 		} catch (e) {
 			state.context.error = e;
 		}
-
+		state.context = extendContext(state.context, 'ARIES Automotive', 'They change the rules, so we make up our own. They put up road blocks; we find a way around. They tell us there is no path ahead; we blaze a trail. At ARIES, we get revved up about going off the beaten path. From our Pro Series grille guards and modular Jeep bumpers to our StyleGuard™ floor liners and Seat Defenders, ARIES offers freedom of customization and a perfect fit for your vehicle. So whatever terrain you choose to conquer, do it with style and do it with ARIES.');
 		return <Home context={state.context} />;
 	});
 

@@ -12,21 +12,8 @@ class LandingPage extends Component {
 	}
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
-
-	componentWillMount() {
-		const title = (this.props.page && this.props.page.Name) ? this.props.page.Name : 'ARIES';
-		this.context.onSetTitle(title);
-		this.context.onSetMeta('description', (this.props.page && this.props.page.Name ? this.props.page.Name : 'Aries Automotive'));
-		const seo = {
-			title,
-		};
-		this.context.seo(seo);
-	}
 
 	renderText() {
 		if (!this.props.page || !this.props.page.HtmlContent) {
@@ -41,7 +28,7 @@ class LandingPage extends Component {
 	render() {
 		return (
 			<div className={cx(s.root)}>
-				<h2>{this.props.page.Name}</h2>
+				<h2>{this.props.page && this.props.page.Name ? this.props.page.Name : null}</h2>
 				{this.renderText()}
 			</div>
 		);

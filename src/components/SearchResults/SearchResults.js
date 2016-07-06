@@ -20,10 +20,7 @@ class SearchResults extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	constructor() {
@@ -36,17 +33,10 @@ class SearchResults extends Component {
 	}
 
 	componentWillMount() {
-		const title = this.props.term ? `Search: ${this.props.term}` : 'Search ARIES';
-		this.context.onSetTitle(title);
-		this.context.onSetMeta('description', title);
 		if (this.props.searchResult.hits && this.props.searchResult.hits.hits) {
 			this.hits = this.props.searchResult.hits.hits.length;
 			this.total = this.props.searchResult.hits.total;
 		}
-		const seo = {
-			title,
-		};
-		this.context.seo(seo);
 	}
 
 	static getStores() {

@@ -7,8 +7,6 @@ import cx from 'classnames';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import AppGuide from './AppGuide/AppGuide';
 
-const title = 'Application Guides';
-
 @withStyles(s)
 @connectToStores
 class AppGuides extends Component {
@@ -20,15 +18,11 @@ class AppGuides extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	static defaultProps = {
 		guides: [],
-		title,
 		guide: null,
 	};
 
@@ -36,10 +30,6 @@ class AppGuides extends Component {
 		super();
 
 		AppGuideActions.all();
-	}
-
-	componentWillMount() {
-		this.context.onSetTitle(title);
 	}
 
 	static getStores() {

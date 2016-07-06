@@ -31,10 +31,7 @@ class VehicleResults extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	constructor() {
@@ -50,14 +47,6 @@ class VehicleResults extends Component {
 			make: this.props.context.params.make,
 			model: this.props.context.params.model,
 		});
-		const title = this.props.context.params.year && this.props.context.params.make && this.props.context.params.model ? `${this.props.context.params.year} ${this.props.context.params.make} ${this.props.context.params.model}` : 'Vehicle Results';
-		this.context.onSetTitle(title);
-		this.context.onSetMeta('description', title);
-		const seo = {
-			title,
-			description: 'ARIES Automotive parts for ' + title,
-		};
-		this.context.seo(seo);
 	}
 
 	static getStores() {

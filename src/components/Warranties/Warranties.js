@@ -8,8 +8,6 @@ import WarrantiesActions from '../../actions/WarrantiesActions';
 import Form from '../Form/Form';
 import connectToStores from 'alt-utils/lib/connectToStores';
 
-const title = 'Warranties';
-
 @withStyles(s)
 @connectToStores
 class Warranties extends Component {
@@ -23,10 +21,7 @@ class Warranties extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	constructor() {
@@ -34,10 +29,6 @@ class Warranties extends Component {
 		this.submit = this.submit.bind(this);
 		this.renderSuccess = this.renderSuccess.bind(this);
 		this.enabled = false;
-	}
-
-	componentWillMount() {
-		this.context.onSetTitle(title);
 	}
 
 	componentWillReceiveProps() {

@@ -74,7 +74,7 @@ class Html extends Component {
 				<head>
 					<meta charSet="utf-8" />
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-					<title>ARIES Automotive | {this.props.title}</title>
+					<title>{this.props.title}</title>
 					<meta name="description" content={this.props.description} />
 					<meta property="og:type" content={this.props.metas['og:type']} />
 					<meta property="og:url" content={this.props.metas['og:url']} />
@@ -90,7 +90,7 @@ class Html extends Component {
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:site" content="@ariesautomotive" />
 					<meta name="google-site-verification" content="2YAIw2si-iBLQTUFUuNXfq8u5uoXzTysfiBTsFntY00" />
-					<meta name="keywords" ng-bind="pageKywds" content="" />
+					<meta name="keywords" content={this.props.metas.keywords} />
 					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 					{/* For iPad with high-resolution Retina display running iOS ≥ 7: */}

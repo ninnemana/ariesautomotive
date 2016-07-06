@@ -12,21 +12,9 @@ class CustomContent extends Component {
 	}
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
-	componentWillMount() {
-		const title = (this.props.context.customContent && this.props.context.customContent.title) ? this.props.context.customContent.title : 'ARIES';
-		this.context.onSetTitle(title);
-		this.context.onSetMeta('description', this.props.context.customContent.metaTitle);
-		const seo = {
-			title,
-		};
-		this.context.seo(seo);
-	}
 	shouldComponentUpdate() {
 		this.setState({
 			notusedstate: Math.random(),

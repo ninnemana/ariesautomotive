@@ -50,38 +50,38 @@ server.get('*', async (req, res, next) => {
 		}
 		const context = {
 			insertCss: styles => css.push(styles._getCss()),
-			onSetTitle: value => data.title = value,
-			onSetMeta: (key, value) => data[key] = value,
+			// onSetTitle: value => data.title = value,
+			// onSetMeta: (key, value) => data[key] = value,
 			onPageNotFound: () => statusCode = 404,
-			seo: (seoInput) => {
-				const props = seoInput;
-				data.metas = {};
-				props.url = `${req.get('host')}${req.originalUrl}`;
-				if (req.protocol && req.protocol !== '') {
-					props.url = req.protocol.concat('://', props.url);
-				}
-				props.type = 'website';
-				props.card = 'summary_large_card';
-				const metaTags = [{ use: 'og', label: 'property' }, { use: 'twitter', label: 'name' }];
-				metaTags.forEach((tag) => {
-					if (!props.image) {
-						props.image = 'https://storage.googleapis.com/aries-logo/ARIES%20Logo%20(1c_red%20on%20transparent_small).png';
-					}
-					if (!props.title) {
-						props.title = 'ARIES Automotive';
-					}
-					if (!props.description) {
-						props.description = 'ARIES Automotive - Whatever terrain you choose to conquer, do it with style and do it with ARIES.';
-					}
-					for (const i in props) {
-						if (!i) {
-							continue;
-						}
-						const key = tag.use + ':' + i;
-						data.metas[key] = props[i];
-					}
-				});
-			},
+			// seo: (seoInput) => {
+			// 	const props = seoInput;
+			// 	data.metas = {};
+			// 	props.url = `${req.get('host')}${req.originalUrl}`;
+			// 	if (req.protocol && req.protocol !== '') {
+			// 		props.url = req.protocol.concat('://', props.url);
+			// 	}
+			// 	props.type = 'website';
+			// 	props.card = 'summary_large_card';
+			// 	const metaTags = [{ use: 'og', label: 'property' }, { use: 'twitter', label: 'name' }];
+			// 	metaTags.forEach((tag) => {
+			// 		if (!props.image) {
+			// 			props.image = 'https://storage.googleapis.com/aries-logo/ARIES%20Logo%20(1c_red%20on%20transparent_small).png';
+			// 		}
+			// 		if (!props.title) {
+			// 			props.title = 'ARIES Automotive';
+			// 		}
+			// 		if (!props.description) {
+			// 			props.description = 'ARIES Automotive - Whatever terrain you choose to conquer, do it with style and do it with ARIES.';
+			// 		}
+			// 		for (const i in props) {
+			// 			if (!i) {
+			// 				continue;
+			// 			}
+			// 			const key = tag.use + ':' + i;
+			// 			data.metas[key] = props[i];
+			// 		}
+			// 	});
+			// },
 		};
 
 		let redirect = null;
@@ -89,9 +89,37 @@ server.get('*', async (req, res, next) => {
 			if (state.redirect) {
 				redirect = state.redirect;
 			}
-			// if (req.path.indexOf('/vehicle') === -1) {
+
+			// seo
+			data.metas = {};
+			data.title = state.context.title ? state.context.title : 'ARIES Automotive';
+			data.description = state.context.description ? state.context.description : 'ARIES Automotive';
+			data.metas.keywords = state.context.keywords;
+
+			const props = {};
+			props.url = `${req.get('host')}${req.originalUrl}`;
+			if (req.protocol && req.protocol !== '') {
+				props.url = req.protocol.concat('://', props.url);
+			}
+			props.type = 'website';
+			props.card = 'summary_large_card';
+
+			const metaTags = [{ use: 'og', label: 'property' }, { use: 'twitter', label: 'name' }];
+			metaTags.forEach((tag) => {
+				props.image = state.context.seo.image;
+				props.title = state.context.seo.title;
+				props.description = state.context.seo.description;
+				for (const i in props) {
+					if (!i) {
+						continue;
+					}
+					const key = tag.use + ':' + i;
+					data.metas[key] = props[i];
+				}
+			});
+			// end seo
+
 			data.body = ReactDOM.renderToString(component);
-			// }
 			data.css = css.join('');
 		});
 

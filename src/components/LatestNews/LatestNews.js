@@ -19,10 +19,7 @@ class LatestNews extends Component {
 	};
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		onSetMeta: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	static defaultProps = {
@@ -33,10 +30,6 @@ class LatestNews extends Component {
 		super();
 
 		NewsActions.all();
-	}
-
-	componentWillMount() {
-		this.context.onSetTitle(title);
 	}
 
 	static getStores() {
