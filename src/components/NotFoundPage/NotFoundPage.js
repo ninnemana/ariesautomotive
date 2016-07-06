@@ -8,18 +8,11 @@ const title = 'Page Not Found';
 class NotFoundPage extends Component {
 
 	static contextTypes = {
-		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
-		seo: PropTypes.func.isRequired,
 	};
 
 	componentWillMount() {
-		this.context.onSetTitle(title);
 		this.context.onPageNotFound();
-		const seo = {
-			title,
-		};
-		this.context.seo(seo);
 	}
 
 	render() {

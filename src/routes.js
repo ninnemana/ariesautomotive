@@ -434,10 +434,14 @@ const router = new Router(on => {
 		return <Home context={state.context} />;
 	});
 
-	on('error', (state, error) => state.statusCode === 404 ?
-		<App context={state.context} error={error}><NotFoundPage /></App> :
-		<App context={state.context} error={error}><ErrorPage /></App>
-	);
+	on('error', (state, error) => {
+		state.context = extendContext(state.context, 'Not Found');
+		return (
+				state.statusCode === 404 ?
+					<App context={state.context} error={error}><NotFoundPage /></App> :
+					<App context={state.context} error={error}><ErrorPage /></App>
+			);
+	});
 });
 
 export default router;
