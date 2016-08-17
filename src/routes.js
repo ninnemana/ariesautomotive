@@ -69,6 +69,11 @@ const router = new Router(on => {
 			}
 			state.context.siteContents = await contentAllReponse.json();
 			const siteContent = await siteContentResponse.json();
+			let pageContent = {};
+			if (siteContent.contentRevisions && siteContent.contentRevisions.length > 0) {
+				pageContent = siteContent.contentRevisions[0];
+			}
+			state.context.pageContent = pageContent;
 			if (siteContent.metaDescription !== undefined && siteContent.metaTitle !== undefined) {
 				const seo = {
 					description: siteContent.metaDescription,

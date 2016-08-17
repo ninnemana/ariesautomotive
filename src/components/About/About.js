@@ -7,11 +7,23 @@ const title = 'About Us';
 @withStyles(s)
 class About extends Component {
 
+	static propTypes = {
+		context: PropTypes.shape({
+			insertCss: PropTypes.func,
+			onSetTitle: PropTypes.func,
+			onSetMeta: PropTypes.func,
+			onPageNotFound: PropTypes.func,
+			pageContent: PropTypes.object,
+		}),
+		error: PropTypes.object,
+	};
+
 	static contextTypes = {
 		onSetTitle: PropTypes.func.isRequired,
 		onPageNotFound: PropTypes.func.isRequired,
 		onSetMeta: PropTypes.func.isRequired,
 		seo: PropTypes.func.isRequired,
+		pageContent: PropTypes.object,
 	};
 
 	componentWillMount() {
@@ -43,7 +55,7 @@ class About extends Component {
 		);
 	}
 
-	render() {
+	renderDefaultContent() {
 		return (
 			<div>
 				<div className="container">
@@ -75,6 +87,27 @@ class About extends Component {
 							the increasing demand for our products and
 							allows for on-time delivery at competitive prices.
 						</p>
+					</div>
+				</div>
+				{this.getMission()}
+				<div className="clearfix"></div>
+			</div>
+		);
+	}
+
+	render() {
+		if (!this.props.context.pageContent || this.props.context.pageContent.text.length < 3) {
+			return this.renderDefaultContent();
+		}
+		if (this.props.context.pageContent.text === '') {
+			return this.renderDefaultContent();
+		}
+		const html = { __html: this.props.context.pageContent.text };
+		return (
+			<div>
+				<div className="container">
+					<div className="col-xs-12 col-md-12 col-lg-12">
+						<div dangerouslySetInnerHTML={html} />
 					</div>
 				</div>
 				{this.getMission()}
