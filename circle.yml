@@ -3,7 +3,7 @@ machine:
     version: 5.2.0
   environment:
     # Replace this with your project ID
-    GCLOUD_PROJECT: "ninnemana-cvdev"
+    GCLOUD_PROJECT: "ninneman-cvdev"
 
 dependencies:
   override:
