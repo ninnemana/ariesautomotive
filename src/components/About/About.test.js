@@ -7,7 +7,7 @@ import About from './About';
 describe('About', () => {
 
 	it('renders', () => {
-		const wrapper = mount(<About  context={{ insertCss: () => {} }} bar="bax"></About>);
+		const wrapper = mount(<About />);
 		// expect(wrapper.props().bar).to.equal("bax");
 
 		// expect(wrapper.contains(<div className="child" />)).to.be.true;
